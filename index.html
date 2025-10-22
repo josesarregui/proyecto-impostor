@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Impostor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container" id="pantallaConfig">
+        <h1>¡Encuentra al Impostor!</h1>
+
+        <div class="configuracion">
+            <label for="totalJugadores">Total de Jugadores:</label>
+            <input type="number" id="totalJugadores" value="5" min="3">
+
+            <label for="numImpostores">Número de Impostores:</label>
+            <input type="number" id="numImpostores" value="1" min="1">
+        </div>
+
+        <div class="tematicas">
+            <label for="selectTematica">Elige una temática:</label>
+            <select id="selectTematica">
+                <option value="paises">Países</option>
+                <option value="futbol">Jugadores de Fútbol</option>
+                <option value="objetos">Objetos</option>
+                <option value="personalizado">Personalizado</option>
+            </select>
+            <input type="text" id="inputPersonalizado" class="oculto" placeholder="Escribe la palabra secreta">
+        </div>
+
+        <button id="botonComenzar">COMENZAR</button>
+
+        <div id="mensajeError" class="error"></div>
+    </div>
+
+    <div class="container oculto" id="pantallaJuego">
+
+        <h2 id="tituloTurno">Turno del Jugador 1</h2>
+        <p>Pasa el dispositivo al jugador correspondiente.</p>
+
+        <div id="carta">
+            <div id="cartaTapada">
+                <p>Toca aquí para revelar tu rol</p>
+                <span>👀</span>
+            </div>
+            <div id="cartaRevelada" class="oculto">
+                <h3 id="textoRol"></h3>
+                <p id="textoPalabra"></p>
+            </div>
+        </div>
+
+        <button id="botonSiguiente" class="oculto">Siguiente Jugador</button>
+    </div>
+
+    <div class="container oculto" id="pantallaInicioRonda">
+        <h2>¡Listos para Jugar!</h2>
+        <p id="textoJugadorInicial">¡Comienza el Jugador 4!</p>
+
+        <button id="botonFinalizar">FINALIZAR JUEGO</button>
+    </div>
+
+    <div class="container oculto" id="pantallaFinal">
+        <h2>¡Juego Terminado!</h2>
+
+        <div class="resultado-final">
+            <p id="palabraFinal">La palabra era: Argentina</p>
+            <p id="impostoresFinal">El/Los impostor(es) era(n): Jugador 2</p>
+        </div>
+
+        <button id="botonJugarNuevo">Jugar de Nuevo</button>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

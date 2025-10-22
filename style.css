@@ -1,0 +1,158 @@
+/* --- Estilos Anteriores (Sin cambios) --- */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+    /* Añadimos esto para que las pantallas se apilen bien */
+    margin: 10px;
+}
+
+h1, h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.configuracion, .tematicas {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="number"], input[type="text"], select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+select {
+    text-align-last: center;
+    -moz-text-align-last: center;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Clase de utilidad para ocultar elementos */
+.oculto {
+    display: none !important;
+}
+
+/* Mensaje de error */
+.error {
+    color: #d9534f;
+    font-weight: bold;
+    margin-top: 15px;
+    min-height: 20px;
+}
+
+/* Estilo de la carta interactiva */
+#carta {
+    background-color: #f9f9f9;
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 40px 20px;
+    cursor: pointer;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-bottom: 25px;
+}
+
+#carta:hover {
+    background-color: #f0f0f0;
+}
+
+#cartaTapada span {
+    font-size: 40px;
+    display: block;
+    margin-top: 10px;
+}
+
+#cartaRevelada h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+#cartaRevelada p {
+    font-size: 20px;
+    font-weight: bold;
+    color: #0056b3;
+    margin: 0;
+}
+
+#cartaRevelada.impostor h3 {
+    color: #d9534f;
+}
+#cartaRevelada.impostor p {
+    display: none;
+}
+
+/* --- Nuevos Estilos --- */
+
+/* Estilo para el botón "FINALIZAR" (opcional, para diferenciarlo) */
+#botonFinalizar {
+    background-color: #dc3545; /* Un color rojo */
+}
+#botonFinalizar:hover {
+    background-color: #c82333;
+}
+
+/* Estilo para el bloque de resultados finales */
+.resultado-final {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+.resultado-final p {
+    font-size: 18px;
+    margin: 10px 0;
+}
+/* Hacemos que la palabra destaque */
+#palabraFinal {
+    font-weight: bold;
+    color: #0056b3;
+}
+/* Hacemos que los impostores destaquen en rojo */
+#impostoresFinal {
+    font-weight: bold;
+    color: #d9534f;
+}
