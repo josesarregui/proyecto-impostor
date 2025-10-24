@@ -1,12 +1,14 @@
-/* --- Estilos Anteriores (Sin cambios) --- */
+/* --- (NUEVO) Estilos Generales con la nueva fuente --- */
 body {
-    font-family: Arial, sans-serif;
+    /* ¡AQUÍ ESTÁ LA NUEVA FUENTE! */
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #f0f2f5;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px 0;
+    flex-wrap: wrap;
 }
 
 .container {
@@ -15,144 +17,204 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 350px;
-    /* Añadimos esto para que las pantallas se apilen bien */
+    width: 380px;
     margin: 10px;
+    flex-shrink: 0;
 }
 
 h1, h2 {
     color: #333;
     margin-top: 0;
     margin-bottom: 25px;
+    font-weight: 700; /* Usamos la nueva fuente */
 }
 
+/* --- Estilos de Configuración (Sin cambios) --- */
 .configuracion, .tematicas {
     margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-
 label {
-    font-weight: bold;
+    font-weight: 600; /* Un poco más de grosor */
     color: #555;
 }
-
 input[type="number"], input[type="text"], select {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
+    font-family: 'Poppins', sans-serif; /* Aplicamos la fuente aquí también */
 }
-
 select {
     text-align-last: center;
     -moz-text-align-last: center;
 }
 
+/* --- Estilo de Botones (Actualizado con la fuente) --- */
 button {
-    background-color: #007bff;
+    background-color: #1F1F1F;
     color: white;
     border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
+    padding: 15px 20px;
+    border-radius: 30px;
     font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
+    font-family: 'Poppins', sans-serif; /* Aplicamos la fuente */
 }
-
 button:hover {
+    background-color: #333;
+}
+#botonComenzar {
+    background-color: #007bff;
+}
+#botonComenzAR:hover {
     background-color: #0056b3;
 }
 
-/* Clase de utilidad para ocultar elementos */
-.oculto {
-    display: none !important;
+/* --- (NUEVO) Estilo de la Carta con Variables CSS --- */
+
+.instruccion-pantalla {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 15px;
 }
 
-/* Mensaje de error */
-.error {
-    color: #d9534f;
-    font-weight: bold;
-    margin-top: 15px;
-    min-height: 20px;
-}
-
-/* Estilo de la carta interactiva */
 #carta {
-    background-color: #f9f9f9;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    padding: 40px 20px;
+    /* (NUEVO) Usamos variables CSS para los colores */
+    /* El segundo valor es un "fallback" o color por defecto */
+    background-color: var(--color-fuerte, #FFD60A);
+
+    border-radius: 20px;
+    padding: 30px;
     cursor: pointer;
-    min-height: 150px;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    transition: background-color 0.3s;
     margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.4s ease;
+    border: none;
 }
 
-#carta:hover {
-    background-color: #f0f0f0;
+/* (NUEVO) Cuando la carta tiene la clase 'revelada', usa el color pálido */
+#carta.revelada {
+    background-color: var(--color-palido, #FFFBEB);
 }
 
-#cartaTapada span {
+/* Título de la carta (JUGADOR 1) */
+.titulo-carta {
+    font-size: 32px;
+    font-weight: 800; /* Extra bold con Poppins */
+    color: #1F1F1F;
+    margin-bottom: 20px;
+}
+
+/* Estilos de la carta TAPADA */
+#cartaTapada {
+    text-align: center;
+}
+.instruccion-tapada {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+.icono-tap {
     font-size: 40px;
     display: block;
-    margin-top: 10px;
+    margin-bottom: 20px;
+    animation: pulso 1.5s infinite ease-in-out;
+}
+.instruccion-revelar {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1F1F1F;
 }
 
-#cartaRevelada h3 {
-    font-size: 22px;
-    margin-bottom: 10px;
+/* Estilos de la carta REVELADA */
+#cartaRevelada {
+    text-align: center;
+    width: 100%;
 }
-#cartaRevelada p {
-    font-size: 20px;
-    font-weight: bold;
-    color: #0056b3;
+.bloque-palabra {
+    background-color: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 15px;
+    padding: 25px;
+    margin-top: 20px;
+}
+#cartaRevelada #textoRol {
+    font-size: 16px;
+    font-weight: 700;
+    color: #555;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+}
+#cartaRevelada #textoPalabra {
+    font-size: 28px;
+    font-weight: 800;
+    color: #000;
     margin: 0;
+    word-wrap: break-word;
 }
 
-#cartaRevelada.impostor h3 {
+/* Estilo de impostor */
+#cartaRevelada.impostor #textoRol {
     color: #d9534f;
+    font-size: 24px;
+    font-weight: 800;
 }
-#cartaRevelada.impostor p {
+#cartaRevelada.impostor .bloque-palabra {
+    border-color: #d9534f;
+    background-color: #fff8f8;
+}
+#cartaRevelada.impostor #textoPalabra {
     display: none;
 }
 
-/* --- Nuevos Estilos --- */
-
-/* Estilo para el botón "FINALIZAR" (opcional, para diferenciarlo) */
+/* --- Estilos Finales (Sin cambios) --- */
+.oculto {
+    display: none !important;
+}
+.error {
+    color: #d9534f;
+    font-weight: 600;
+    margin-top: 15px;
+    min-height: 20px;
+}
 #botonFinalizar {
-    background-color: #dc3545; /* Un color rojo */
+    background-color: #dc3545;
 }
 #botonFinalizar:hover {
     background-color: #c82333;
 }
-
-/* Estilo para el bloque de resultados finales */
 .resultado-final {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 20px;
-    margin-bottom: 25px;
+    /* ... (sin cambios) ... */
 }
 .resultado-final p {
     font-size: 18px;
     margin: 10px 0;
 }
-/* Hacemos que la palabra destaque */
 #palabraFinal {
-    font-weight: bold;
+    font-weight: 600;
     color: #0056b3;
 }
-/* Hacemos que los impostores destaquen en rojo */
 #impostoresFinal {
-    font-weight: bold;
+    font-weight: 600;
     color: #d9534f;
+}
+
+@keyframes pulso {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
