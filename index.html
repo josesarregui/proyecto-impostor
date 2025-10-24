@@ -3,18 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selector de Impostor</title>
-
+    <title>Impostor</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🕵️‍♂️</text></svg>'>
 </head>
 <body>
 
-    <div class="container" id="pantallaConfig">
-        <h1>¡Encuentra al Impostor!</h1>
+    <div class="container" id="pantallaMenu">
+
+        <div class="logo">🕵️‍♂️</div>
+        <h1>¡Bienvenido!</h1>
+        <p class="instruccion-pantalla">Elige un modo de juego para comenzar.</p>
+        <div class="menu-opciones">
+            <button id="botonJugarLocal">Jugar Local</button>
+            <button id="botonGestionarCategorias" class="boton-secundario">Mis Categorías</button>
+            <button id="botonJugarOnline" disabled>Jugar Online (Próximamente)</button>
+        </div>
+    </div>
+
+    <div class="container oculto" id="pantallaConfig">
+        <h1>Configurar Partida</h1>
         <div class="configuracion">
             <label for="totalJugadores">Total de Jugadores:</label>
             <input type="number" id="totalJugadores" value="5" min="3">
@@ -24,15 +35,46 @@
         <div class="tematicas">
             <label for="selectTematica">Elige una temática:</label>
             <select id="selectTematica">
-                <option value="paises">Países</option>
-                <option value="futbol">Jugadores de Fútbol</option>
-                <option value="objetos">Objetos</option>
-                <option value="personalizado">Personalizado</option>
-            </select>
-            <input type="text" id="inputPersonalizado" class="oculto" placeholder="Escribe la palabra secreta">
+                </select>
+        </div>
+        <div class="tematicas oculto" id="divSubTematica">
+            <label for="selectSubTematica">Elige una subcategoría:</label>
+            <select id="selectSubTematica">
+                </select>
         </div>
         <button id="botonComenzar">COMENZAR</button>
+        <button id="botonVolverMenu" class="boton-secundario">Volver al Menú</button>
         <div id="mensajeError" class="error"></div>
+    </div>
+
+    <div class="container oculto" id="pantallaGestionar">
+        <h2>Gestionar Categorías</h2>
+        <p class="instruccion-pantalla">Puedes crear, editar o eliminar tus categorías.</p>
+
+        <button id="botonIrACrear" class="boton-crear">Crear Nueva Categoría</button>
+
+        <hr class="divisor">
+
+        <div id="listaCategoriasPropias">
+            </div>
+
+        <button id="botonVolverMenuGestionar" class="boton-secundario">Volver al Menú</button>
+    </div>
+
+    <div class="container oculto" id="pantallaCrearCategoria">
+        <h2 id="tituloCrearEditar">Crear Categoría</h2>
+
+        <div id="mensajeCategoria" class="info" style="display: none;"></div>
+        <div class="configuracion">
+            <label for="inputNombreCategoria">Nombre de la Categoría:</label>
+            <input type="text" id="inputNombreCategoria" placeholder="Ej: Películas de Marvel">
+
+            <label for="textareaPalabras">Palabras / Frases (Una por renglón):</label>
+            <textarea id="textareaPalabras" rows="10" placeholder="Iron Man&#10;Capitán América&#10;Thor&#10;..."></textarea>
+            <p id="conteoPalabras">0 / 50 palabras</p>
+        </div>
+        <button id="botonGuardarCategoria">Guardar Categoría</button>
+        <button id="botonVolverGestionar" class="boton-secundario">Cancelar</button>
     </div>
 
     <div class="container oculto" id="pantallaJuego">

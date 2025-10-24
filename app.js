@@ -1,47 +1,84 @@
-// --- 1. Base de datos de palabras ---
+// --- 1. Base de datos de palabras (NUEVA ESTRUCTURA) ---
 const TEMAS = {
-    // ... (sin cambios)
-    paises: ["Argentina", "Japón", "Egipto", "Canadá", "Brasil", "Australia", "Italia", "Rusia", "India", "México"],
-    futbol: ["Messi", "Ronaldo", "Maradona", "Pelé", "Neymar", "Mbappé", "Zidane", "Ronaldinho", "Beckham", "Cruyff"],
-    objetos: ["Tenedor", "Lámpara", "Teléfono", "Silla", "Libro", "Reloj", "Botella", "Llaves", "Mochila", "Ventana"]
+    objetos: {
+        nombre: "Objetos",
+        palabras: ["Tenedor", "Lámpara", "Teléfono", "Silla", "Libro", "Reloj", "Botella", "Llaves", "Mochila", "Ventana"]
+    },
+    futbol: {
+        nombre: "Fútbol",
+        subcategorias: {
+            jugadores: {
+                nombre: "Jugadores",
+                palabras: ["Messi", "Ronaldo", "Maradona", "Pelé", "Neymar", "Mbappé", "Zidane", "Ronaldinho", "Beckham", "Cruyff"]
+            },
+            equipos: {
+                nombre: "Equipos",
+                palabras: ["Real Madrid", "Barcelona", "Boca Juniors", "River Plate", "Manchester United", "Liverpool", "Juventus", "Bayern Munich"]
+            }
+        }
+    },
+    animales: {
+        nombre: "Animales",
+        subcategorias: {
+            domesticos: {
+                nombre: "Domésticos",
+                palabras: ["Perro", "Gato", "Hámster", "Pez Dorado", "Loro", "Conejo"]
+            },
+            salvajes: {
+                nombre: "Salvajes",
+                palabras: ["León", "Elefante", "Jirafa", "Tigre", "Oso", "Hipopótamo", "Canguro"]
+            }
+        }
+    }
 };
 
-// --- (NUEVO) Listas de Colores ---
-// Colores Fuertes para la carta tapada
-const COLORES_CARTA_FUERTE = [
-    '#FFD60A', // 1: Amarillo
-    '#00A6FB', // 2: Azul
-    '#FF595E', // 3: Rojo
-    '#e83e8c', // 4: Rosa
-    '#8338EC', // 5: Violeta
-    '#00C49A'  // 6: Verde
-];
-// Colores Pálidos (los de la carta revelada)
-const COLORES_CARTA_PALIDO = [
-    '#FFFBEB', // 1: Amarillo Pálido
-    '#E6F6FF', // 2: Azul Pálido
-    '#FFF0F1', // 3: Rojo Pálido
-    '#FDECF4', // 4: Rosa Pálido
-    '#F3EBFF', // 5: Violeta Pálido
-    '#E6FAF5'  // 6: Verde Pálido
-];
+// Listas de colores
+const COLORES_CARTA_FUERTE = ['#FFD60A', '#00A6FB', '#FF595E', '#e83e8c', '#8338EC', '#00C49A'];
+const COLORES_CARTA_PALIDO = ['#FFFBEB', '#E6F6FF', '#FFF0F1', '#FDECF4', '#F3EBFF', '#E6FAF5'];
 
-// --- 2. Variables de Estado del Juego ---
-let totalJugadores = 0;
-let impostores = [];
-let tripulantes = [];
-let palabraSecreta = "";
-let jugadorActual = 1;
+// --- 2. Constantes de Límites ---
+const MAX_CATEGORIAS = 2;
+const MAX_PALABRAS = 50;
+const MAX_CHAR_PALABRA = 30;
 
-// --- 3. Obtener Elementos del HTML ---
-// ... (sin cambios en esta sección)
+// --- 3. Variables de Estado del Juego ---
+let totalJugadores = 0, impostores = [], tripulantes = [], palabraSecreta = "", jugadorActual = 1;
+let modoEdicion = null; // Guarda el nombre de la categoría que se está editando
+
+// --- 4. Obtener Elementos del HTML ---
+// Pantalla de Menú
+const pantallaMenu = document.getElementById('pantallaMenu');
+const botonJugarLocal = document.getElementById('botonJugarLocal');
+const botonGestionarCategorias = document.getElementById('botonGestionarCategorias');
+
+// Pantalla de Configuración
 const pantallaConfig = document.getElementById('pantallaConfig');
 const inputTotalJugadores = document.getElementById('totalJugadores');
 const inputNumImpostores = document.getElementById('numImpostores');
 const selectTematica = document.getElementById('selectTematica');
-const inputPersonalizado = document.getElementById('inputPersonalizado');
+const divSubTematica = document.getElementById('divSubTematica');
+const selectSubTematica = document.getElementById('selectSubTematica');
 const botonComenzar = document.getElementById('botonComenzar');
+const botonVolverMenu = document.getElementById('botonVolverMenu');
 const mensajeError = document.getElementById('mensajeError');
+
+// Pantalla Gestionar Categorías
+const pantallaGestionar = document.getElementById('pantallaGestionar');
+const botonIrACrear = document.getElementById('botonIrACrear');
+const listaCategoriasPropias = document.getElementById('listaCategoriasPropias');
+const botonVolverMenuGestionar = document.getElementById('botonVolverMenuGestionar');
+
+// Pantalla Crear/Editar Categoría
+const pantallaCrearCategoria = document.getElementById('pantallaCrearCategoria');
+const tituloCrearEditar = document.getElementById('tituloCrearEditar');
+const inputNombreCategoria = document.getElementById('inputNombreCategoria');
+const textareaPalabras = document.getElementById('textareaPalabras');
+const conteoPalabras = document.getElementById('conteoPalabras');
+const botonGuardarCategoria = document.getElementById('botonGuardarCategoria');
+const botonVolverGestionar = document.getElementById('botonVolverGestionar');
+const mensajeCategoria = document.getElementById('mensajeCategoria');
+
+// Pantallas de Juego
 const pantallaJuego = document.getElementById('pantallaJuego');
 const carta = document.getElementById('carta');
 const cartaTapada = document.getElementById('cartaTapada');
@@ -57,141 +94,433 @@ const palabraFinal = document.getElementById('palabraFinal');
 const impostoresFinal = document.getElementById('impostoresFinal');
 const botonJugarNuevo = document.getElementById('botonJugarNuevo');
 
-// --- 4. Event Listeners ---
-// ... (sin cambios en esta sección)
-selectTematica.addEventListener('change', function() {
-    if (selectTematica.value === 'personalizado') {
-        inputPersonalizado.classList.remove('oculto');
-    } else {
-        inputPersonalizado.classList.add('oculto');
-    }
+// --- 5. Event Listeners ---
+
+// Listener de Carga
+document.addEventListener('DOMContentLoaded', () => {
+    popularTemasPrincipales();
+    cargarCategoriasPropias();
 });
+
+// Listeners del Menú Principal
+botonJugarLocal.addEventListener('click', () => cambiarPantalla(pantallaConfig, pantallaMenu));
+botonGestionarCategorias.addEventListener('click', mostrarPantallaGestionar);
+
+// Listeners de Configuración
+selectTematica.addEventListener('change', actualizarSubcategorias);
 botonComenzar.addEventListener('click', iniciarJuego);
+botonVolverMenu.addEventListener('click', () => cambiarPantalla(pantallaMenu, pantallaConfig));
+
+// Listeners de Pantalla Gestionar
+botonIrACrear.addEventListener('click', irAPantallaCrear);
+botonVolverMenuGestionar.addEventListener('click', () => cambiarPantalla(pantallaMenu, pantallaGestionar));
+
+// Listeners de Crear Categoría
+botonGuardarCategoria.addEventListener('click', guardarCategoria);
+botonVolverGestionar.addEventListener('click', () => cambiarPantalla(pantallaGestionar, pantallaCrearCategoria));
+textareaPalabras.addEventListener('input', actualizarConteoPalabras);
+
+// Listeners de Juego
 carta.addEventListener('click', revelarCarta);
 botonSiguiente.addEventListener('click', siguienteTurno);
 botonFinalizar.addEventListener('click', mostrarPantallaFinal);
 botonJugarNuevo.addEventListener('click', reiniciarJuego);
 
-// --- 5. Funciones Principales ---
+// --- 6. Funciones de Navegación y Categorías ---
 
-function iniciarJuego() {
-    // ... (sin cambios)
-    mensajeError.textContent = '';
-    totalJugadores = parseInt(inputTotalJugadores.value);
-    const numImpostores = parseInt(inputNumImpostores.value);
-    const tema = selectTematica.value;
-    const palabraPersonalizada = inputPersonalizado.value;
-    if (numImpostores >= totalJugadores) {
-        mensajeError.textContent = 'Error: No puede haber más impostores que jugadores.';
-        return;
-    }
-    if (tema === 'personalizado' && palabraPersonalizada.trim() === '') {
-        mensajeError.textContent = 'Error: Debes escribir una palabra personalizada.';
-        return;
-    }
-    if (totalJugadores < 3 || numImpostores < 1) {
-        mensajeError.textContent = 'Error: Mínimo 3 jugadores y 1 impostor.';
-        return;
-    }
-    jugadorActual = 1;
-    seleccionarPalabra(tema, palabraPersonalizada);
-    seleccionarImpostores(totalJugadores, numImpostores);
-    pantallaConfig.classList.add('oculto');
-    pantallaJuego.classList.remove('oculto');
-    prepararTurno();
+function cambiarPantalla(pantallaMostrar, pantallaOcultar) {
+    pantallaMostrar.classList.remove('oculto');
+    pantallaOcultar.classList.add('oculto');
 }
 
-function seleccionarPalabra(tema, palabraPersonalizada) {
-    // ... (sin cambios)
-    if (tema === 'personalizado') {
-        palabraSecreta = palabraPersonalizada;
-    } else {
-        const listaPalabras = TEMAS[tema];
-        const indiceAleatorio = Math.floor(Math.random() * listaPalabras.length);
-        palabraSecreta = listaPalabras[indiceAleatorio];
-    }
-}
+/**
+ * Llena el primer <select> con las categorías base
+ */
+function popularTemasPrincipales() {
+    selectTematica.innerHTML = ''; // Limpiamos
 
-function seleccionarImpostores(total, num) {
-    // ... (sin cambios)
-    impostores = [];
-    tripulantes = [];
-    let jugadores = [];
-    for (let i = 1; i <= total; i++) {
-        jugadores.push(i);
-    }
-    for (let i = jugadores.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [jugadores[i], jugadores[j]] = [jugadores[j], jugadores[i]];
-    }
-    impostores = jugadores.slice(0, num);
-    for (let i = 1; i <= total; i++) {
-        if (!impostores.includes(i)) {
-            tripulantes.push(i);
-        }
+    for (const key in TEMAS) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = TEMAS[key].nombre;
+        selectTematica.appendChild(option);
     }
 }
 
 /**
- * (FUNCIÓN ACTUALIZADA)
- * Prepara la pantalla para el turno del jugador actual
+ * Muestra y llena el segundo <select> si es necesario
  */
-function prepararTurno() {
+function actualizarSubcategorias() {
+    const temaKey = selectTematica.value;
+    selectSubTematica.innerHTML = '';
 
-    // Actualizamos los títulos de la carta
+    if (temaKey.startsWith('custom_')) {
+        divSubTematica.classList.add('oculto');
+        return;
+    }
+
+    const tema = TEMAS[temaKey];
+
+    if (tema && tema.subcategorias) {
+        const optionTodo = document.createElement('option');
+        optionTodo.value = "todo";
+        optionTodo.textContent = `Todo ${tema.nombre}`;
+        selectSubTematica.appendChild(optionTodo);
+
+        for (const subKey in tema.subcategorias) {
+            const option = document.createElement('option');
+            option.value = subKey;
+            option.textContent = tema.subcategorias[subKey].nombre;
+            selectSubTematica.appendChild(option);
+        }
+
+        divSubTematica.classList.remove('oculto');
+    } else {
+        divSubTematica.classList.add('oculto');
+    }
+}
+
+/**
+ * Carga las categorías de localStorage
+ */
+function cargarCategoriasPropias() {
+    document.querySelectorAll('#selectTematica option[data-propia="true"]').forEach(opt => opt.remove());
+
+    const grupoPropiasExistente = document.getElementById('grupoPropias');
+    if (grupoPropiasExistente) {
+        grupoPropiasExistente.remove();
+    }
+
+    const categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+
+    if (categoriasGuardadas.length > 0) {
+        const grupoPropias = document.createElement('optgroup');
+        grupoPropias.id = 'grupoPropias';
+        grupoPropias.label = 'Mis Categorías';
+        selectTematica.appendChild(grupoPropias);
+
+        categoriasGuardadas.forEach(cat => {
+            const option = document.createElement('option');
+            option.value = `custom_${cat.nombre}`;
+            option.textContent = cat.nombre;
+            option.dataset.propia = "true";
+            grupoPropias.appendChild(option);
+        });
+    }
+
+    actualizarSubcategorias();
+}
+
+/**
+ * Muestra la pantalla de gestión y llena la lista
+ */
+function mostrarPantallaGestionar() {
+    popularListaGestionar();
+    const categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+
+    if (categoriasGuardadas.length >= MAX_CATEGORIAS) {
+        botonIrACrear.disabled = true;
+        botonIrACrear.textContent = "Límite de categorías alcanzado";
+    } else {
+        botonIrACrear.disabled = false;
+        botonIrACrear.textContent = "Crear Nueva Categoría";
+    }
+    cambiarPantalla(pantallaGestionar, pantallaMenu);
+}
+
+/**
+ * Llena la lista en la pantalla de "Gestionar Categorías"
+ */
+function popularListaGestionar() {
+    listaCategoriasPropias.innerHTML = '';
+    const categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+
+    if (categoriasGuardadas.length === 0) {
+        listaCategoriasPropias.innerHTML = '<p class="instruccion-pantalla">No has creado ninguna categoría.</p>';
+        return;
+    }
+
+    categoriasGuardadas.forEach(cat => {
+        const item = document.createElement('div');
+        item.className = 'item-categoria';
+
+        const nombre = document.createElement('span');
+        nombre.textContent = cat.nombre;
+        item.appendChild(nombre);
+
+        const botonesDiv = document.createElement('div');
+        botonesDiv.className = 'item-botones';
+
+        const btnEditar = document.createElement('button');
+        btnEditar.className = 'boton-icono boton-editar';
+        btnEditar.innerHTML = '✏️';
+        btnEditar.onclick = () => cargarCategoriaParaEditar(cat.nombre);
+        botonesDiv.appendChild(btnEditar);
+
+        const btnEliminar = document.createElement('button');
+        btnEliminar.className = 'boton-icono boton-eliminar';
+        btnEliminar.innerHTML = '🗑️';
+        btnEliminar.onclick = () => eliminarCategoria(cat.nombre);
+        botonesDiv.appendChild(btnEliminar);
+
+        item.appendChild(botonesDiv);
+        listaCategoriasPropias.appendChild(item);
+    });
+}
+
+/**
+ * Prepara la pantalla de "Crear" para modo Edición
+ */
+function cargarCategoriaParaEditar(nombreCategoria) {
+    const categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+    const categoria = categoriasGuardadas.find(cat => cat.nombre === nombreCategoria);
+    if (!categoria) return;
+
+    modoEdicion = nombreCategoria;
+    tituloCrearEditar.textContent = "Editar Categoría";
+    mensajeCategoria.style.display = 'none';
+
+    inputNombreCategoria.value = categoria.nombre;
+    textareaPalabras.value = categoria.palabras.join('\n');
+    actualizarConteoPalabras();
+
+    cambiarPantalla(pantallaCrearCategoria, pantallaGestionar);
+}
+
+/**
+ * Prepara la pantalla de "Crear" para modo Creación
+ */
+function irAPantallaCrear() {
+    modoEdicion = null;
+    tituloCrearEditar.textContent = "Crear Categoría";
+    mensajeCategoria.style.display = 'none';
+
+    inputNombreCategoria.value = "";
+    textareaPalabras.value = "";
+    actualizarConteoPalabras();
+
+    cambiarPantalla(pantallaCrearCategoria, pantallaGestionar);
+}
+
+/**
+ * Elimina una categoría del localStorage
+ */
+function eliminarCategoria(nombreCategoria) {
+    if (!confirm(`¿Estás seguro de que quieres eliminar la categoría "${nombreCategoria}"?`)) {
+        return;
+    }
+
+    let categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+    categoriasGuardadas = categoriasGuardadas.filter(cat => cat.nombre !== nombreCategoria);
+    localStorage.setItem('categoriasPropias', JSON.stringify(categoriasGuardadas));
+
+    popularListaGestionar();
+    cargarCategoriasPropias();
+
+    if (categoriasGuardadas.length < MAX_CATEGORIAS) {
+        botonIrACrear.disabled = false;
+        botonIrACrear.textContent = "Crear Nueva Categoría";
+    }
+}
+
+function actualizarConteoPalabras() {
+    const palabras = textareaPalabras.value.split('\n').filter(p => p.trim() !== "");
+    conteoPalabras.textContent = `${palabras.length} / ${MAX_PALABRAS} palabras`;
+    if (palabras.length > MAX_PALABRAS) {
+        conteoPalabras.style.color = 'red';
+    } else {
+        conteoPalabras.style.color = '#777';
+    }
+}
+
+/**
+ * Guarda una categoría (Nueva o Editada)
+ */
+function guardarCategoria() {
+    const nombreNuevo = inputNombreCategoria.value.trim();
+    const palabras = textareaPalabras.value.split('\n').filter(p => p.trim() !== "");
+    let categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+
+    // --- Validación ---
+    const nombresBase = Object.keys(TEMAS);
+    if (!nombreNuevo) {
+        mostrarMensaje(mensajeCategoria, "Error: Debes darle un nombre a la categoría.", 'error');
+        return;
+    }
+
+    const esNombreDuplicado = categoriasGuardadas.some(
+        cat => cat.nombre.toLowerCase() === nombreNuevo.toLowerCase() && cat.nombre !== modoEdicion
+    );
+    if (esNombreDuplicado || nombresBase.includes(nombreNuevo.toLowerCase())) {
+        mostrarMensaje(mensajeCategoria, "Error: Ya existe una categoría con ese nombre.", 'error');
+        return;
+    }
+    if (palabras.length === 0) {
+        mostrarMensaje(mensajeCategoria, "Error: Debes añadir al menos una palabra.", 'error');
+        return;
+    }
+    if (palabras.length > MAX_PALABRAS) {
+        mostrarMensaje(mensajeCategoria, `Error: Límite de ${MAX_PALABRAS} palabras excedido.`, 'error');
+        return;
+    }
+    const palabraLarga = palabras.find(p => p.length > MAX_CHAR_PALABRA);
+    if (palabraLarga) {
+        mostrarMensaje(mensajeCategoria, `Error: La palabra "${palabraLarga}" excede los ${MAX_CHAR_PALABRA} caracteres.`, 'error');
+        return;
+    }
+
+    // --- Guardado (Lógica actualizada) ---
+    if (modoEdicion) {
+        // --- MODO ACTUALIZAR ---
+        const index = categoriasGuardadas.findIndex(cat => cat.nombre === modoEdicion);
+        if (index > -1) {
+            categoriasGuardadas[index].nombre = nombreNuevo;
+            categoriasGuardadas[index].palabras = palabras;
+        }
+    } else {
+        // --- MODO CREAR ---
+        if (categoriasGuardadas.length >= MAX_CATEGORIAS) {
+            mostrarMensaje(mensajeCategoria, `Error: Límite de ${MAX_CATEGORIAS} categorías alcanzado.`, 'error');
+            return;
+        }
+        const nuevaCategoria = { nombre: nombreNuevo, palabras: palabras };
+        categoriasGuardadas.push(nuevaCategoria);
+    }
+
+    localStorage.setItem('categoriasPropias', JSON.stringify(categoriasGuardadas));
+
+    // --- Finalización ---
+    modoEdicion = null;
+    cargarCategoriasPropias();
+    mostrarPantallaGestionar();
+    cambiarPantalla(pantallaGestionar, pantallaCrearCategoria);
+}
+
+function mostrarMensaje(elemento, texto, tipo = 'info') {
+    elemento.textContent = texto;
+    elemento.className = tipo;
+    elemento.style.display = 'block';
+}
+
+// --- 7. Funciones Principales del Juego ---
+
+function iniciarJuego() {
+    mensajeError.style.display = 'none';
+
+    totalJugadores = parseInt(inputTotalJugadores.value);
+    const numImpostores = parseInt(inputNumImpostores.value);
+
+    const temaKey = selectTematica.value;
+    const subTemaKey = selectSubTematica.value;
+
+    if (!seleccionarPalabra(temaKey, subTemaKey)) {
+        return;
+    }
+
+    if (numImpostores >= totalJugadores) {
+        mostrarMensaje(mensajeError, 'Error: No puede haber más impostores que jugadores.', 'error');
+        return;
+    }
+     if (totalJugadores < 3 || numImpostores < 1) {
+        mostrarMensaje(mensajeError, 'Error: Mínimo 3 jugadores y 1 impostor.', 'error');
+        return;
+    }
+
+    jugadorActual = 1;
+    seleccionarImpostores(totalJugadores, numImpostores);
+    cambiarPantalla(pantallaJuego, pantallaConfig);
+    prepararTurno();
+}
+
+function seleccionarPalabra(temaKey, subTemaKey) {
+    let listaPalabras = [];
+
+    if (temaKey.startsWith('custom_')) {
+        // --- Lógica de categorías propias ---
+        const nombreCat = temaKey.replace('custom_', '');
+        const categoriasGuardadas = JSON.parse(localStorage.getItem('categoriasPropias')) || [];
+        const miCategoria = categoriasGuardadas.find(cat => cat.nombre === nombreCat);
+
+        if (!miCategoria || miCategoria.palabras.length === 0) {
+            mostrarMensaje(mensajeError, `Error: La categoría propia "${nombreCat}" no se encontró o está vacía.`, 'error');
+            return false;
+        }
+        listaPalabras = miCategoria.palabras;
+
+    } else {
+        // --- Lógica de categorías base ---
+        const tema = TEMAS[temaKey];
+
+        if (tema.subcategorias) {
+            if (subTemaKey === "todo") {
+                for (const subKey in tema.subcategorias) {
+                    listaPalabras = listaPalabras.concat(tema.subcategorias[subKey].palabras);
+                }
+            } else {
+                listaPalabras = tema.subcategorias[subTemaKey].palabras;
+            }
+        } else {
+            listaPalabras = tema.palabras;
+        }
+    }
+
+    if (!listaPalabras || listaPalabras.length === 0) {
+         mostrarMensaje(mensajeError, `Error: La categoría seleccionada está vacía.`, 'error');
+        return false;
+    }
+
+    const indiceAleatorio = Math.floor(Math.random() * listaPalabras.length);
+    palabraSecreta = listaPalabras[indiceAleatorio];
+    return true; // Éxito
+}
+
+function seleccionarImpostores(total, num) {
+    impostores = [];
+    tripulantes = [];
+    let jugadores = Array.from({length: total}, (_, i) => i + 1);
+
+    for (let i = jugadores.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [jugadores[i], jugadores[j]] = [jugadores[j], jugadores[i]];
+    }
+
+    impostores = jugadores.slice(0, num);
+    tripulantes = jugadores.slice(num);
+}
+
+function prepararTurno() {
     document.getElementById('tituloCartaTapada').textContent = `JUGADOR ${jugadorActual}`;
     document.getElementById('tituloCartaRevelada').textContent = `JUGADOR ${jugadorActual}`;
 
-    // --- (NUEVA LÓGICA DE COLOR) ---
-    // 1. Calculamos el índice del color
-    // (jugadorActual - 1) porque los arrays empiezan en 0
-    // % (módulo) para que los colores se repitan (ej: 6 % 6 = 0, 7 % 6 = 1)
     const colorIndex = (jugadorActual - 1) % COLORES_CARTA_FUERTE.length;
-
-    // 2. Obtenemos los colores de las listas
     const colorFuerte = COLORES_CARTA_FUERTE[colorIndex];
     const colorPalido = COLORES_CARTA_PALIDO[colorIndex];
 
-    // 3. Los "inyectamos" como variables CSS en el elemento 'carta'
     carta.style.setProperty('--color-fuerte', colorFuerte);
     carta.style.setProperty('--color-palido', colorPalido);
-    // --- FIN DE LÓGICA DE COLOR ---
 
-    // Reseteamos el estado de la carta (CSS usará --color-fuerte)
     carta.classList.remove('revelada');
-
-    // Reseteamos el resto
     cartaTapada.classList.remove('oculto');
     cartaRevelada.classList.add('oculto');
     botonSiguiente.classList.add('oculto');
     cartaRevelada.classList.remove('impostor');
     botonSiguiente.textContent = "SIGUIENTE JUGADOR";
 
-    // Quitamos el flash por si el jugador anterior fue impostor
     pantallaJuego.classList.remove('flash-impostor');
 }
 
-/**
- * (FUNCIÓN ACTUALIZADA)
- * Se ejecuta cuando el jugador toca la carta
- */
 function revelarCarta() {
     cartaTapada.classList.add('oculto');
     cartaRevelada.classList.remove('oculto');
     botonSiguiente.classList.remove('oculto');
-
-    // (NUEVO) Añadimos la clase 'revelada'
-    // El CSS se encarga del resto, usando la variable --color-palido
     carta.classList.add('revelada');
 
     if (impostores.includes(jugadorActual)) {
-        // ... (sin cambios)
         textoRol.textContent = "¡ERES EL IMPOSTOR!";
         textoPalabra.textContent = "";
         cartaRevelada.classList.add('impostor');
         pantallaJuego.classList.add('flash-impostor');
     } else {
-        // ... (sin cambios)
         textoRol.textContent = "LA PALABRA ES:";
         textoPalabra.textContent = palabraSecreta;
     }
@@ -202,7 +531,6 @@ function revelarCarta() {
 }
 
 function siguienteTurno() {
-    // ... (sin cambios)
     if (jugadorActual === totalJugadores) {
         mostrarInicioRonda();
     } else {
@@ -212,18 +540,16 @@ function siguienteTurno() {
 }
 
 function mostrarInicioRonda() {
-    // ... (sin cambios)
-    pantallaJuego.classList.add('oculto');
-    pantallaInicioRonda.classList.remove('oculto');
+    cambiarPantalla(pantallaInicioRonda, pantallaJuego);
+
     const indiceAleatorio = Math.floor(Math.random() * tripulantes.length);
     const jugadorInicial = tripulantes[indiceAleatorio];
     textoJugadorInicial.textContent = `¡Comienza el Jugador ${jugadorInicial}!`;
 }
 
 function mostrarPantallaFinal() {
-    // ... (sin cambios)
-    pantallaInicioRonda.classList.add('oculto');
-    pantallaFinal.classList.remove('oculto');
+    cambiarPantalla(pantallaFinal, pantallaInicioRonda);
+
     palabraFinal.textContent = `La palabra era: ${palabraSecreta}`;
     if (impostores.length === 1) {
         impostoresFinal.textContent = `El impostor era: Jugador ${impostores[0]}`;
@@ -233,15 +559,14 @@ function mostrarPantallaFinal() {
 }
 
 function reiniciarJuego() {
-    // ... (sin cambios)
-    pantallaFinal.classList.add('oculto');
-    pantallaConfig.classList.remove('oculto');
+    cambiarPantalla(pantallaMenu, pantallaFinal);
+
     totalJugadores = 0;
     impostores = [];
     tripulantes = [];
     palabraSecreta = "";
     jugadorActual = 1;
-    inputPersonalizado.value = '';
-    inputPersonalizado.classList.add('oculto');
-    selectTematica.value = 'paises';
+
+    selectTematica.value = 'objetos';
+    actualizarSubcategorias();
 }

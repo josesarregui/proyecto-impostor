@@ -1,14 +1,28 @@
-/* --- (NUEVO) Estilos Generales con la nueva fuente --- */
+/* --- Estilos Generales --- */
 body {
-    /* ¡AQUÍ ESTÁ LA NUEVA FUENTE! */
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f0f2f5;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     justify-content: center;
-    align-items: center;
     min-height: 100vh;
     padding: 20px 0;
     flex-wrap: wrap;
+    align-items: flex-start;
+    padding-top: 5vh;
+}
+
+/* Estilo para el Logo */
+.logo {
+    font-size: 60px;
+    line-height: 1;
+    margin-bottom: 15px;
+    animation: mirada-costado 4s infinite ease-in-out;
+}
+
+/* Estilo para el texto de la subcategoría */
+optgroup {
+    font-weight: 700;
+    font-style: italic;
 }
 
 .container {
@@ -17,7 +31,8 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 380px;
+    max-width: 380px;
+    width: 100%;
     margin: 10px;
     flex-shrink: 0;
 }
@@ -26,10 +41,9 @@ h1, h2 {
     color: #333;
     margin-top: 0;
     margin-bottom: 25px;
-    font-weight: 700; /* Usamos la nueva fuente */
+    font-weight: 700;
 }
 
-/* --- Estilos de Configuración (Sin cambios) --- */
 .configuracion, .tematicas {
     margin-bottom: 25px;
     display: flex;
@@ -37,23 +51,25 @@ h1, h2 {
     gap: 15px;
 }
 label {
-    font-weight: 600; /* Un poco más de grosor */
+    font-weight: 600;
     color: #555;
 }
-input[type="number"], input[type="text"], select {
+input[type="number"], input[type="text"], select, textarea {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
     text-align: center;
-    font-family: 'Poppins', sans-serif; /* Aplicamos la fuente aquí también */
+    font-family: 'Poppins', sans-serif;
+    resize: vertical;
+    min-height: 40px;
 }
 select {
     text-align-last: center;
     -moz-text-align-last: center;
 }
 
-/* --- Estilo de Botones (Actualizado con la fuente) --- */
+/* --- Estilo de Botones --- */
 button {
     background-color: #1F1F1F;
     color: white;
@@ -66,20 +82,72 @@ button {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
-    font-family: 'Poppins', sans-serif; /* Aplicamos la fuente */
+    font-family: 'Poppins', sans-serif;
+    margin-top: 10px;
 }
 button:hover {
     background-color: #333;
 }
-#botonComenzar {
+#botonComenzar, #botonJugarLocal, #botonGuardarCategoria {
     background-color: #007bff;
 }
-#botonComenzAR:hover {
+#botonComenzar:hover, #botonJugarLocal:hover, #botonGuardarCategoria:hover {
     background-color: #0056b3;
 }
 
-/* --- (NUEVO) Estilo de la Carta con Variables CSS --- */
+.boton-secundario {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+}
+.boton-secundario:hover {
+    background-color: #e0e0e0;
+}
 
+button:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* --- Estilos de Pantallas de Menú y Crear --- */
+.menu-opciones {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#conteoPalabras {
+    font-size: 14px;
+    color: #777;
+    text-align: right;
+    margin-top: -5px;
+}
+
+.info {
+    color: #0056b3;
+    background-color: #e6f6ff;
+    border: 1px solid #00a6fb;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.error {
+    color: #d9534f;
+    background-color: #fdf2f2;
+    border: 1px solid #d9534f;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+/* Estilo para el segundo desplegable */
+#divSubTematica {
+    margin-top: 15px;
+}
+
+/* --- Estilo de la Carta con Variables CSS --- */
 .instruccion-pantalla {
     font-size: 16px;
     color: #555;
@@ -87,10 +155,7 @@ button:hover {
 }
 
 #carta {
-    /* (NUEVO) Usamos variables CSS para los colores */
-    /* El segundo valor es un "fallback" o color por defecto */
     background-color: var(--color-fuerte, #FFD60A);
-
     border-radius: 20px;
     padding: 30px;
     cursor: pointer;
@@ -104,21 +169,15 @@ button:hover {
     transition: background-color 0.4s ease;
     border: none;
 }
-
-/* (NUEVO) Cuando la carta tiene la clase 'revelada', usa el color pálido */
 #carta.revelada {
     background-color: var(--color-palido, #FFFBEB);
 }
-
-/* Título de la carta (JUGADOR 1) */
 .titulo-carta {
     font-size: 32px;
-    font-weight: 800; /* Extra bold con Poppins */
+    font-weight: 800;
     color: #1F1F1F;
     margin-bottom: 20px;
 }
-
-/* Estilos de la carta TAPADA */
 #cartaTapada {
     text-align: center;
 }
@@ -139,8 +198,6 @@ button:hover {
     font-weight: 700;
     color: #1F1F1F;
 }
-
-/* Estilos de la carta REVELADA */
 #cartaRevelada {
     text-align: center;
     width: 100%;
@@ -166,8 +223,6 @@ button:hover {
     margin: 0;
     word-wrap: break-word;
 }
-
-/* Estilo de impostor */
 #cartaRevelada.impostor #textoRol {
     color: #d9534f;
     font-size: 24px;
@@ -181,16 +236,12 @@ button:hover {
     display: none;
 }
 
-/* --- Estilos Finales (Sin cambios) --- */
+/* --- CLASE CLAVE --- */
 .oculto {
     display: none !important;
 }
-.error {
-    color: #d9534f;
-    font-weight: 600;
-    margin-top: 15px;
-    min-height: 20px;
-}
+
+/* --- Estilos Finales --- */
 #botonFinalizar {
     background-color: #dc3545;
 }
@@ -198,7 +249,11 @@ button:hover {
     background-color: #c82333;
 }
 .resultado-final {
-    /* ... (sin cambios) ... */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 25px;
 }
 .resultado-final p {
     font-size: 18px;
@@ -211,6 +266,100 @@ button:hover {
 #impostoresFinal {
     font-weight: 600;
     color: #d9534f;
+}
+
+#listaCategoriasPropias {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.item-categoria {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.item-categoria span {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    /* Para nombres largos */
+    word-break: break-word;
+    padding-right: 10px;
+}
+
+.item-botones {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0; /* Evita que los botones se achiquen */
+}
+
+/* Botones pequeños de icono */
+.boton-icono {
+    /* (NUEVO) Centramos el emoji perfectamente con Flexbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+    border-radius: 50%; /* Circulares */
+    width: 44px; /* Ancho fijo */
+    height: 44px; /* Alto fijo */
+    margin-top: 0; /* Sobrescribe el margen de botones */
+
+    /* (ELIMINADO) Quitamos el padding, flexbox lo maneja mejor */
+    /* padding: 8px 12px; */
+
+    /* (NUEVO) Nos aseguramos que el borde cuente dentro de los 44px */
+    box-sizing: border-box;
+}
+.boton-editar {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid transparent;
+}
+.boton-editar:hover {
+    background-color: #e0e0e0;
+}
+
+.boton-eliminar {
+    background-color: #fdf2f2;
+    color: #d9534f;
+    border: 1px solid #d9534f;
+}
+.boton-eliminar:hover {
+    background-color: #fbeaea;
+}
+
+/* Botón "Crear Nueva" */
+.boton-crear {
+    background-color: #28a745; /* Verde */
+    color: white;
+}
+.boton-crear:hover {
+    background-color: #218838;
+}
+
+/* Divisor simple */
+.divisor {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 25px 0;
+}
+
+/* Animación para el logo */
+@keyframes mirada-costado {
+    0% { transform: rotate(0deg); }
+    30% { transform: rotate(0deg); }
+    40% { transform: rotate(15deg); }
+    50% { transform: rotate(0deg); }
+    60% { transform: rotate(-15deg); }
+    70% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
 }
 
 @keyframes pulso {
