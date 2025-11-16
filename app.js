@@ -40,6 +40,7 @@ const COLORES_CARTA_PALIDO = ['#FFFBEB', '#E6F6FF', '#FFF0F1', '#FDECF4', '#F3EB
 const MAX_CATEGORIAS = 5;
 const MAX_PALABRAS = 50;
 const MAX_CHAR_PALABRA = 30;
+const MAX_JUGADORES = 20;
 
 // --- 3. Variables de Estado del Juego ---
 let totalJugadores = 0, impostores = [], tripulantes = [], palabraSecreta = "", jugadorActual = 1;
@@ -425,6 +426,13 @@ function iniciarJuego() {
         mostrarMensaje(mensajeError, 'Error: Mínimo 3 jugadores y 1 impostor.', 'error');
         return;
     }
+    
+    // --- ESTA ES LA MODIFICACIÓN ---
+    if (totalJugadores > MAX_JUGADORES) {
+        mostrarMensaje(mensajeError, `Error: El máximo es de ${MAX_JUGADORES} jugadores.`, 'error');
+        return;
+    }
+    // --- FIN DE LA MODIFICACIÓN ---
 
     jugadorActual = 1;
     seleccionarImpostores(totalJugadores, numImpostores);
