@@ -37,7 +37,7 @@ const COLORES_CARTA_FUERTE = ['#FFD60A', '#00A6FB', '#FF595E', '#e83e8c', '#8338
 const COLORES_CARTA_PALIDO = ['#FFFBEB', '#E6F6FF', '#FFF0F1', '#FDECF4', '#F3EBFF', '#E6FAF5'];
 
 // --- 2. Constantes de Límites ---
-const MAX_CATEGORIAS = 2;
+const MAX_CATEGORIAS = 5;
 const MAX_PALABRAS = 50;
 const MAX_CHAR_PALABRA = 30;
 
